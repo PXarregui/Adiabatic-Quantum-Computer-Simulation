@@ -10,6 +10,10 @@ def test_coefficient_hi_generator():
         assert isinstance(Simulation.coefficient_hi_generator(3, 1)[i], float)
         i+=1
 
+#Test the Jij generator function to see if the matrix has the apropriate dimension. 
+def test_shape_coefficient_Jij_generator():
+    assert numpy.shape(Simulation.coefficient_Jij_generator(3, 1))==(3,3)
+
 #Test if the Jij coefficient matrix is symmetric with 0s in the diagonal and real numbers elsewhere.
 def test_matrix_coefficient_Jij_generator():
     i=0
