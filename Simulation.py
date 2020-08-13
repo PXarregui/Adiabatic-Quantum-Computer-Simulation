@@ -10,7 +10,7 @@ parameters=open("Simulation_parameters.txt","r")
 all_lines=parameters.readlines()
 parameters.close()
 
-#This function generates Jij and hi coefficients in order to generate the later Hamiltonians
+#This function generates hi coefficients in order to generate the later Hamiltonians
 def coefficient_hi_generator(number_of_particles,random_or_not):
     if abs(number_of_particles)>8 or abs(number_of_particles)==0:
         sys.exit("You must insert as number of particles a positive integer lower than 8 and higher than 0.")
@@ -35,8 +35,8 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
                 hi[i]=random.random()
                 i=i+1
             return(hi)  
-
-
-
-
-
+ 
+    
+    
+    
+    
