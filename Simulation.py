@@ -51,19 +51,16 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                 i=i+1
             return(Jij)
         elif random_or_not==1:
-            #Create Jij array with 0s to give it value later
-            Jij=np.zeros((number_of_particles,number_of_particles))
+            Jij=np.random.rand(number_of_particles,number_of_particles)
             i=0
             while i<number_of_particles:
                 j=0
-                random.seed()
                 while j<number_of_particles:
-                    if i<j:#The coupling coefficient is 0 if the index is equal
-                        Jij[i,j]=random.random()
+                    if i==j:#The coupling coefficient is 0 if the index is equal
+                        Jij[i,j]=0.
+                    if i<j:
                         Jij[j,i]=Jij[i,j]
                     j=j+1 
                 i=i+1
-            return(Jij)   
-    
-    
+            return(Jij)    
     
