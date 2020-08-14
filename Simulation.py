@@ -18,7 +18,7 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
         if random_or_not==0:
-            #Create both Jij and hi arrays with 0s to give them value later
+            #Create hi array with 0s to give it value later
             hi=np.zeros(number_of_particles)
             i=0
             while i<number_of_particles:
@@ -27,13 +27,7 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
             i=0
             return(hi)
         elif random_or_not==1:
-            #Create both Jij and hi arrays with 0s to give them value later
-            hi=np.zeros(number_of_particles)
-            i=0
-            while i<number_of_particles:
-                random.seed()
-                hi[i]=random.random()
-                i=i+1
+            hi=np.random.rand(number_of_particles)
             return(hi)  
  
 #This function generates Jij coefficients in order to generate the later Hamiltonians       
@@ -44,7 +38,7 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
         if random_or_not==0:
-            #Create both Jij and hi arrays with 0s to give them value later
+            #Create Jij array with 0s to give it value later
             Jij=np.zeros((number_of_particles,number_of_particles))
             i=0
             while i<number_of_particles:
@@ -57,7 +51,7 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                 i=i+1
             return(Jij)
         elif random_or_not==1:
-            #Create both Jij and hi arrays with 0s to give them value later
+            #Create Jij array with 0s to give it value later
             Jij=np.zeros((number_of_particles,number_of_particles))
             i=0
             while i<number_of_particles:
