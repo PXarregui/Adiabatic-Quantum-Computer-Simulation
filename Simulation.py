@@ -5,7 +5,6 @@ import scipy.linalg as la
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 
-
 parameters=open("Simulation_parameters.txt","r")
 all_lines=parameters.readlines()
 parameters.close()
@@ -29,7 +28,7 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
         elif random_or_not==1:
             hi=np.random.rand(number_of_particles)
             return(hi)  
- 
+
 #This function generates Jij coefficients in order to generate the later Hamiltonians       
 def coefficient_Jij_generator(number_of_particles,random_or_not):
     if abs(number_of_particles)>8 or abs(number_of_particles)==0:
@@ -64,7 +63,7 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                 i=i+1
             return(Jij)    
         
-#Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1
+#Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1. Useful for the construction of the Hamiltonians.
 def btest(i,n):
     if (i & (1<<n)) :
         return(1.)
@@ -74,3 +73,21 @@ def btest(i,n):
         return(-1.)
         ## n-th bit is not set (0)
     
+#Create the target Hamiltonian towards which the system will evolve
+def Hamiltonian_1(number_of_particles,hi=coefficient_hi_generator(int(all_lines[0]), int(all_lines[1])),Jij=coefficient_Jij_generator(int(all_lines[0]), int(all_lines[1]))):
+    ham1=np.zeros((2**number_of_particles,2**number_of_particles))
+    i=0
+    while i<2**(number_of_particles):
+        j=0
+        suma=0.
+        while j<number_of_particles:
+            k=0
+            while k<number_of_particles:
+                suma=suma+btest(i,j)*btest(i,k)*Jij[j,k]
+                k=k+1
+            suma=suma+btest(i,j)*hi[j]
+            j=j+1
+        ham1[i,i]=suma
+        i=i+1
+    return(ham1)
+

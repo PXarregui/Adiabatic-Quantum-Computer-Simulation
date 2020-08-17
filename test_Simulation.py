@@ -68,5 +68,14 @@ def test_btest_1():
 
 def test_btest_2():
     assert Simulation.btest(99,2)==-1,0
+
+# -----------------------------------------------------------------------------
+    
+def test_Hamiltonian_1():
+    hi=numpy.array((1,1))
+    Jij=numpy.array(((0,1),(1,0)))
+    expected_result=numpy.array(((0.,0.,0.,0.),(0.,2.,0.,0.),(0.,0.,2.,0.),(0.,0.,0.,4.)))
+    actual_result=Simulation.Hamiltonian_1(2,hi,Jij)
+    assert actual_result.all()==expected_result.all()
         
         
