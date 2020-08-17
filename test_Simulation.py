@@ -61,6 +61,12 @@ def test_symmetry_coefficient_Jij_generator():
         i+=1      
         
 # -----------------------------------------------------------------------------        
-        
+  
+#Test btest function, to see if it returns 1.0 or -1.0 when it should.
+def test_btest_1():
+    assert Simulation.btest(100,2)==1.0
+
+def test_btest_2():
+    assert Simulation.btest(99,2)==-1,0
         
         

@@ -63,4 +63,14 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                     j=j+1 
                 i=i+1
             return(Jij)    
+        
+#Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1
+def btest(i,n):
+    if (i & (1<<n)) :
+        return(1.)
+        ## n-th bit is set (1)
+
+    else:
+        return(-1.)
+        ## n-th bit is not set (0)
     
