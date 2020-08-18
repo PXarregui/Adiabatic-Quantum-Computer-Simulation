@@ -91,3 +91,20 @@ def Hamiltonian_1(number_of_particles,hi=coefficient_hi_generator(int(all_lines[
         i=i+1
     return(ham1)
 
+#Create the initial Hamiltonian representing the transversal field
+def Hamiltonian_0(number_of_particles):
+    H0=np.zeros((2**number_of_particles,2**number_of_particles))
+    i=0
+    while i<2**number_of_particles:
+        j=0
+        while j<number_of_particles:
+            if btest(i,j)==1.:
+                H0[i,i-2**j]=1
+                H0[i-2**j,i]=1
+            else:
+                H0[i,i+2**j]=1
+                H0[i+2**j,i]=1
+            j=j+1
+        i=i+1
+    return(H0)
+

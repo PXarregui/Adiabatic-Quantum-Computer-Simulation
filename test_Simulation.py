@@ -9,7 +9,7 @@ def test_shape_coefficient_hi_generator():
     assert numpy.shape(Simulation.coefficient_hi_generator(3, 1))==(3,)
  
 #Test the hi coefficient generator function to see if the return value is an array of real numbers.
-def test_real_coefficient_Jij_generator():
+def test_real_coefficient_hi_generator():
     i=0
     while i<3:
         assert isinstance(Simulation.coefficient_hi_generator(3, 1)[i], float)
@@ -77,5 +77,10 @@ def test_Hamiltonian_1():
     expected_result=numpy.array(((0.,0.,0.,0.),(0.,2.,0.,0.),(0.,0.,2.,0.),(0.,0.,0.,4.)))
     actual_result=Simulation.Hamiltonian_1(2,hi,Jij)
     assert actual_result.all()==expected_result.all()
+    
+# -----------------------------------------------------------------------------
         
-        
+def test_Hamiltonian_0():
+    expected_result=numpy.array(((0.,1.,1.,0.),(1.,0.,0.,1.),(1.,0.,0.,1.),(0.,1.,1.,0.)))
+    actual_result=Simulation.Hamiltonian_0(2)
+    assert actual_result.all()==expected_result.all()       
