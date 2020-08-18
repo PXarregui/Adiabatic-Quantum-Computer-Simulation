@@ -44,7 +44,6 @@ def test_matrix_real_coefficient_Jij_generator():
         while j<3:
             if i!=j:
                 assert isinstance(generated_matrix[i,j], float)
-                assert generated_matrix[i,j]==generated_matrix[j,i]
             j+=1
         i+=1
  
