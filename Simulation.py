@@ -17,13 +17,19 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
         if random_or_not==0:
-            #Create hi array with 0s to give it value later
-            hi=np.zeros(number_of_particles)
-            i=0
-            while i<number_of_particles:
-                hi[i]=float(input("Introduce the element h{}: ".format(i+1)))
-                i=i+1
-            i=0
+            with open("Simulation_parameters.txt","r") as parameters:
+                hi=np.zeros(number_of_particles)
+                lines=parameters.read().splitlines()
+                line_marker=1
+                for line in lines:
+                    if line_marker==3:
+                        numbers=line.split(",")
+                        k=0
+                        for number in numbers:
+                            num=float(number)
+                            hi[k]=num
+                            k+=1
+                    line_marker+=1
             return(hi)
         elif random_or_not==1:
             hi=np.random.rand(number_of_particles)
@@ -37,17 +43,21 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
         if random_or_not==0:
-            #Create Jij array with 0s to give it value later
-            Jij=np.zeros((number_of_particles,number_of_particles))
-            i=0
-            while i<number_of_particles:
-                j=0
-                while j<number_of_particles:
-                    if i<j:
-                        Jij[i,j]=float(input("Introduce the element J{}{}: ".format(i+1,j+1)))
-                        Jij[j,i]=Jij[i,j]
-                    j=j+1
-                i=i+1
+            with open("Simulation_parameters.txt","r") as parameters:
+                Jij=np.zeros((number_of_particles,number_of_particles))
+                lines=parameters.read().splitlines()
+                i=0
+                line_marker=1
+                for line in lines:
+                    if line_marker>3:
+                        numbers=line.split(",")
+                        j=0
+                        for number in numbers:
+                            num=float(number)
+                            Jij[i,j]=num
+                            j+=1
+                        i+=1
+                    line_marker+=1
             return(Jij)
         elif random_or_not==1:
             Jij=np.random.rand(number_of_particles,number_of_particles)
@@ -61,8 +71,8 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                         Jij[j,i]=Jij[i,j]
                     j=j+1 
                 i=i+1
-            return(Jij)    
-        
+            return(Jij)      
+
 #Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1. Useful for the construction of the Hamiltonians.
 def btest(i,n):
     if (i & (1<<n)) :
