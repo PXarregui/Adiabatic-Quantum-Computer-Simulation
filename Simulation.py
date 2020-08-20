@@ -55,9 +55,12 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                         for number in numbers:
                             num=float(number)
                             Jij[i,j]=num
+                            if i==j:
+                                if Jij[i,i]!=0.:
+                                    sys.exit("The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
                             j+=1
                         i+=1
-                    line_marker+=1
+                    line_marker+=1 
             return(Jij)
         elif random_or_not==1:
             Jij=np.random.rand(number_of_particles,number_of_particles)
@@ -117,4 +120,3 @@ def Hamiltonian_0(number_of_particles):
             j=j+1
         i=i+1
     return(H0)
-
