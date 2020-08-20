@@ -58,6 +58,11 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                             if i==j:
                                 if Jij[i,i]!=0.:
                                     sys.exit("The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
+                            if i>j:
+                                if Jij[i,j]!=Jij[j,i]:
+                                    print(i,j)
+                                    print(Jij[i,j],Jij[j,i])
+                                    sys.exit("The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
                             j+=1
                         i+=1
                     line_marker+=1 
