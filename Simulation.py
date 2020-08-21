@@ -11,8 +11,8 @@ parameters.close()
 
 #This function generates hi coefficients in order to generate the later Hamiltonians
 def coefficient_hi_generator(number_of_particles,random_or_not):
-    if abs(number_of_particles)>8 or abs(number_of_particles)==0:
-        sys.exit("You must insert as number of particles a positive integer lower than 8 and higher than 0.")
+    if abs(number_of_particles)>8 or abs(number_of_particles)<2:
+        sys.exit("You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
     elif random_or_not not in [0,1]:
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
@@ -39,8 +39,8 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
 
 #This function generates Jij coefficients in order to generate the later Hamiltonians       
 def coefficient_Jij_generator(number_of_particles,random_or_not):
-    if abs(number_of_particles)>8 or abs(number_of_particles)==0:
-        sys.exit("You must insert as number of particles a positive integer lower than 8 and higher than 0.")
+    if abs(number_of_particles)>8 or abs(number_of_particles)<2:
+        sys.exit("You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
     elif random_or_not not in [0,1]:
         sys.exit("The second line of the file containing the parameters must be 0 or 1.")
     else:
