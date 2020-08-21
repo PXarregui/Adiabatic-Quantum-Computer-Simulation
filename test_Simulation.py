@@ -19,13 +19,21 @@ def test_real_random_coefficient_hi_generator():
 #NOT RANDOM
 #Test the hi coefficient generator function to see if the return value is a properly shaped numpy array.
 def test_shape_coefficient_hi_generator():
-    assert numpy.shape(Simulation.coefficient_hi_generator(3, 0))==(3,)
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
+    assert numpy.shape(Simulation.coefficient_hi_generator(number_of_particles, 0))==(number_of_particles,)
  
 #Test the hi coefficient generator function to see if the return value is an array of real numbers.
 def test_real_coefficient_hi_generator():
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
     i=0
-    while i<3:
-        assert isinstance(Simulation.coefficient_hi_generator(3, 0)[i], float)
+    while i<number_of_particles:
+        assert isinstance(Simulation.coefficient_hi_generator(number_of_particles, 0)[i], float)
         i+=1
 # -----------------------------------------------------------------------------
         
@@ -75,15 +83,23 @@ def test_symmetry_random_coefficient_Jij_generator():
 #NOT RANDOM
 #Test the Jij generator function to see if the matrix has the apropriate dimension. 
 def test_shape_coefficient_Jij_generator():
-    assert numpy.shape(Simulation.coefficient_Jij_generator(3, 0))==(3,3)
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
+    assert numpy.shape(Simulation.coefficient_Jij_generator(number_of_particles, 0))==(number_of_particles,number_of_particles)
 
 #Test if the Jij coefficient matrix has 0s in the diagonal.
 def test_matrix_diagonal_coefficient_Jij_generator():
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
     i=0
-    generated_matrix=Simulation.coefficient_Jij_generator(3, 0)
-    while i<3:
+    generated_matrix=Simulation.coefficient_Jij_generator(number_of_particles, 0)
+    while i<number_of_particles:
         j=0
-        while j<3:
+        while j<number_of_particles:
             if i==j:
                 assert generated_matrix[i,j]==0.
             j+=1
@@ -91,11 +107,15 @@ def test_matrix_diagonal_coefficient_Jij_generator():
          
 #Test if the Jij coefficient matrix is composed of real numbers elsewhere.
 def test_matrix_real_coefficient_Jij_generator():
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
     i=0
-    generated_matrix=Simulation.coefficient_Jij_generator(3, 0)
-    while i<3:
+    generated_matrix=Simulation.coefficient_Jij_generator(number_of_particles, 0)
+    while i<number_of_particles:
         j=0
-        while j<3:
+        while j<number_of_particles:
             if i!=j:
                 assert isinstance(generated_matrix[i,j], float)
             j+=1
@@ -103,11 +123,15 @@ def test_matrix_real_coefficient_Jij_generator():
  
 #Test if the Jij coefficient matrix is symmetric.
 def test_symmetry_coefficient_Jij_generator():
+    parameters=open("Simulation_parameters.txt","r")
+    lines=parameters.readlines()
+    number_of_particles=int(lines[0])
+    parameters.close()
     i=0
-    generated_matrix=Simulation.coefficient_Jij_generator(3, 0)
-    while i<3:
+    generated_matrix=Simulation.coefficient_Jij_generator(number_of_particles, 0)
+    while i<number_of_particles:
         j=0
-        while j<3:
+        while j<number_of_particles:
             if i!=j:
                 assert generated_matrix[i,j]==generated_matrix[j,i]
             j+=1

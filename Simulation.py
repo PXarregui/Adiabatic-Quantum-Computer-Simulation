@@ -24,6 +24,8 @@ def coefficient_hi_generator(number_of_particles,random_or_not):
                 for line in lines:
                     if line_marker==3:
                         numbers=line.split(",")
+                        if len(numbers)!=number_of_particles:
+                            sys.exit("The dimension of the vector must be equal to the number of particles.")
                         k=0
                         for number in numbers:
                             num=float(number)
@@ -51,6 +53,8 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                 for line in lines:
                     if line_marker>3:
                         numbers=line.split(",")
+                        if len(numbers)!=number_of_particles:
+                            sys.exit("The dimension of the matrix must be consistent with the number of particles.")
                         j=0
                         for number in numbers:
                             num=float(number)
@@ -60,8 +64,6 @@ def coefficient_Jij_generator(number_of_particles,random_or_not):
                                     sys.exit("The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
                             if i>j:
                                 if Jij[i,j]!=Jij[j,i]:
-                                    print(i,j)
-                                    print(Jij[i,j],Jij[j,i])
                                     sys.exit("The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
                             j+=1
                         i+=1
