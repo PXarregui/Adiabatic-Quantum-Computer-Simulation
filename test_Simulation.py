@@ -161,3 +161,11 @@ def test_Hamiltonian_0():
     expected_result=numpy.array(((0.,1.,1.,0.),(1.,0.,0.,1.),(1.,0.,0.,1.),(0.,1.,1.,0.)))
     actual_result=Simulation.Hamiltonian_0(2)
     assert actual_result.all()==expected_result.all()       
+    
+# -----------------------------------------------------------------------------
+    
+def test_gap_two_smallest_in_array():
+    array=[0,2,5,9,14]
+    expected_result=2
+    actual_result=Simulation.gap_two_smallest_in_array(array)
+    assert actual_result==expected_result
