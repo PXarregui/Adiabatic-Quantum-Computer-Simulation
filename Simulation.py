@@ -127,7 +127,7 @@ def Hamiltonian_0(number_of_particles):
             j=j+1
         i=i+1
     return(H0)
-
+print(Hamiltonian_0(2))
 def gap_two_smallest_in_array(array):
     array_size = len(array) 
     first = second = float("inf")
@@ -153,3 +153,28 @@ def position_smallest_in_array(array):
             smallest = array[i] 
             position=i
     return(position)
+
+def quantum_simulation(num_steps,number_of_particles,H0=Hamiltonian_0(int(all_lines[0])),H1=Hamiltonian_1(int(all_lines[0]))):
+    step=1.0/(float(num_steps)) #Size of the step
+    s=0.0
+    i=0
+    gap=np.zeros(num_steps+1)#array that will contain energy gap
+    eigenvectors=np.zeros((num_steps+1,2**number_of_particles))
+    while i<=num_steps:
+        #We construct the matrix H(s) which evolves from H0 to ham1
+        H_s=s*H1+(1.0-s)*H0
+        #We diagonalize H_s and obtain its eigenvalues and eigenvectors
+        eigenvals,eigenvecs=la.eig(H_s)
+        eigenvals=eigenvals.real #converts eigenvalues to real numbers
+        #We obtain the two lowesr eigenvalues, which will give the ground and the first excited state
+        gap[i]=gap_two_smallest_in_array(eigenvals)
+        position=position_smallest_in_array(eigenvals)
+        eigenvectors[i]=np.array(eigenvecs[:,position])#The eigenvectors are the columns of eigenvecs
+        s=s+step
+        i=i+1
+    probability=eigenvectors**2
+    return(gap,probability)
+
+    
+    
+    

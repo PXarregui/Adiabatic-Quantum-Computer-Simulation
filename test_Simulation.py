@@ -177,3 +177,27 @@ def test_position_smallest_in_array():
     expected_result=3
     actual_result=Simulation.position_smallest_in_array(array)
     assert actual_result==expected_result
+    
+# -----------------------------------------------------------------------------
+    
+def test_gap_quantum_simulation():
+    hi=numpy.array((1,1))
+    Jij=numpy.array(((0,1),(1,0)))
+    H0=Simulation.Hamiltonian_0(2)
+    H1=Simulation.Hamiltonian_1(2,hi,Jij)
+    expected_result=numpy.array((2.,0.4811943,2.))
+    actual_result,_=Simulation.quantum_simulation(2,2,H0,H1)
+    assert actual_result.all()==expected_result.all()
+    
+# -----------------------------------------------------------------------------
+    
+def test_eigenvectors_quantum_simulation():
+    hi=numpy.array((1,1))
+    Jij=numpy.array(((0,1),(1,0)))
+    H0=Simulation.Hamiltonian_0(2)
+    H1=Simulation.Hamiltonian_1(2,hi,Jij)
+    expected_result=numpy.array(((0.25,0.25,0.25,0.25),(0.17956835,0.39396156,0.39396156,0.03250853),(0.,1.,0.,0.)))
+    _,actual_result=Simulation.quantum_simulation(2,2,H0,H1)
+    assert actual_result.all()==expected_result.all()
+    
+    
