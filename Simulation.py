@@ -132,16 +132,24 @@ def gap_two_smallest_in_array(array):
     array_size = len(array) 
     first = second = float("inf")
     for i in range(0, array_size): 
-  
         # If current element is smaller than first then 
         # update both first and second 
         if array[i] < first: 
             second = first 
             first = array[i] 
-  
         # If arr[i] is in between first and second then 
         # update second 
         elif (array[i] < second and array[i] != first): 
             second = array[i]; 
     gap=second-first
     return(gap) 
+
+def position_smallest_in_array(array):
+    array_size = len(array) 
+    smallest= float("inf")
+    for i in range(0, array_size): 
+        # If current element is smaller than smallest, update smallest
+        if array[i] < smallest: 
+            smallest = array[i] 
+            position=i
+    return(position)

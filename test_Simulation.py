@@ -169,3 +169,11 @@ def test_gap_two_smallest_in_array():
     expected_result=2
     actual_result=Simulation.gap_two_smallest_in_array(array)
     assert actual_result==expected_result
+    
+# -----------------------------------------------------------------------------
+    
+def test_position_smallest_in_array():
+    array=[2,5,9,0,14]
+    expected_result=3
+    actual_result=Simulation.position_smallest_in_array(array)
+    assert actual_result==expected_result
