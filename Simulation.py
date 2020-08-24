@@ -210,3 +210,23 @@ def computation_time(num_steps,number_of_particles,H0,H1):
     time=integrate.simps(speed_inverse,xaxis)
     time=round(time,4)
     return(time)
+
+# Once all functions are written initialize the variables and call the functions
+    
+#Open the file to read the parameters
+parameters=open("Simulation_parameters.txt","r")
+all_lines=parameters.readlines()
+parameters.close()
+
+#Assign the values to the functions' input variables
+number_of_particles=int(all_lines[0])
+random_or_not=int(all_lines[1])
+hi=coefficient_hi_generator(number_of_particles,random_or_not)
+Jij=coefficient_Jij_generator(number_of_particles,random_or_not)
+H0=Hamiltonian_0(int(all_lines[0]))
+H1=Hamiltonian_1(int(all_lines[0]),hi,Jij)
+
+#Call the functions to return the desired plots and results
+plot_gap(100,number_of_particles,H0,H1)
+plot_states(100,number_of_particles,H0,H1)
+print("The time required for the Adiabatic quantum computing is: ", computation_time(100,number_of_particles,H0,H1))
