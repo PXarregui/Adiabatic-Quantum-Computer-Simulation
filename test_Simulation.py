@@ -200,4 +200,14 @@ def test_eigenvectors_quantum_simulation():
     _,actual_result=Simulation.quantum_simulation(2,2,H0,H1)
     assert actual_result.all()==expected_result.all()
     
+# -----------------------------------------------------------------------------
+    
+def test_computational_time():
+    hi=numpy.array((1,2))
+    Jij=numpy.array(((0,1),(1,0)))
+    H0=Simulation.Hamiltonian_0(2)
+    H1=Simulation.Hamiltonian_1(2,hi,Jij)
+    expected_result=0.6571
+    actual_result=Simulation.computation_time(100, 2, H0, H1)
+    assert actual_result==expected_result
     

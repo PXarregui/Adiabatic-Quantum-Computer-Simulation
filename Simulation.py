@@ -201,3 +201,12 @@ def plot_states(num_steps,number_of_particles,H0,H1):
     plt.ylabel("Probability")
     plt.xlabel("Adiabatic parameter (s)")
     plt.show()
+
+#Let's integrate to obtain the time required for the AQC
+def computation_time(num_steps,number_of_particles,H0,H1):
+    gap,_=quantum_simulation(num_steps,number_of_particles,H0,H1)
+    xaxis=np.linspace(0.,1.,101)
+    speed_inverse=1.0/(gap**2)
+    time=integrate.simps(speed_inverse,xaxis)
+    time=round(time,4)
+    return(time)
