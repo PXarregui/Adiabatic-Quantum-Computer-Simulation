@@ -192,3 +192,18 @@ def plot_gap(num_steps=100,number_of_particles=int(all_lines[0])):
     plt.legend()
     plt.show()
     
+#We also can represent the evolution of the probability of each state 
+def plot_states(num_steps=100,number_of_particles=int(all_lines[0])):
+    _,probability=quantum_simulation(num_steps,number_of_particles)
+    xaxis=np.linspace(0.,1.,101)
+    plt.figure()
+    i=0
+    for i in range(2**number_of_particles):
+        plt.plot(xaxis,probability[:,i])
+    plt.yscale('log')
+    plt.gca().set_ylim([0.0001,1.])
+    plt.ylabel("Probability")
+    plt.xlabel("Adiabatic parameter (s)")
+    plt.show()
+
+plot_states()
