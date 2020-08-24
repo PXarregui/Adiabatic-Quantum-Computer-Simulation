@@ -127,7 +127,7 @@ def Hamiltonian_0(number_of_particles):
             j=j+1
         i=i+1
     return(H0)
-print(Hamiltonian_0(2))
+
 def gap_two_smallest_in_array(array):
     array_size = len(array) 
     first = second = float("inf")
@@ -175,6 +175,20 @@ def quantum_simulation(num_steps,number_of_particles,H0=Hamiltonian_0(int(all_li
     probability=eigenvectors**2
     return(gap,probability)
 
-    
-    
+#We can represent the evolution of the gap and speed   
+def plot_gap(num_steps=100,number_of_particles=int(all_lines[0])):
+    gap,_=quantum_simulation(num_steps,number_of_particles)
+    speed=gap**2
+    xaxis=np.linspace(0.,1.,101)
+    yaxis=np.array([gap,speed])
+    plt.figure()
+    label=np.array(["Gap","Speed"])
+    j=0
+    for i in yaxis:
+        plt.plot(xaxis,i,label=label[j])
+        j=j+1
+    plt.ylabel("Gap, Speed")
+    plt.xlabel("Adiabatic parameter (s)")
+    plt.legend()
+    plt.show()
     
