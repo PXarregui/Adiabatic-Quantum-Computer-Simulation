@@ -5,10 +5,6 @@ import scipy.linalg as la
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 
-parameters=open("Simulation_parameters.txt","r")
-all_lines=parameters.readlines()
-parameters.close()
-
 #This function generates hi coefficients in order to generate the later Hamiltonians
 def coefficient_hi_generator(number_of_particles,random_or_not):
     if abs(number_of_particles)>8 or abs(number_of_particles)<2:
@@ -94,7 +90,7 @@ def btest(i,n):
         ## n-th bit is not set (0)
     
 #Create the target Hamiltonian towards which the system will evolve
-def Hamiltonian_1(number_of_particles,hi=coefficient_hi_generator(int(all_lines[0]), int(all_lines[1])),Jij=coefficient_Jij_generator(int(all_lines[0]), int(all_lines[1]))):
+def Hamiltonian_1(number_of_particles,hi,Jij):
     ham1=np.zeros((2**number_of_particles,2**number_of_particles))
     i=0
     while i<2**(number_of_particles):
@@ -154,7 +150,7 @@ def position_smallest_in_array(array):
             position=i
     return(position)
 
-def quantum_simulation(num_steps,number_of_particles,H0=Hamiltonian_0(int(all_lines[0])),H1=Hamiltonian_1(int(all_lines[0]))):
+def quantum_simulation(num_steps,number_of_particles,H0,H1):
     step=1.0/(float(num_steps)) #Size of the step
     s=0.0
     i=0
@@ -176,8 +172,8 @@ def quantum_simulation(num_steps,number_of_particles,H0=Hamiltonian_0(int(all_li
     return(gap,probability)
 
 #We can represent the evolution of the gap and speed   
-def plot_gap(num_steps=100,number_of_particles=int(all_lines[0])):
-    gap,_=quantum_simulation(num_steps,number_of_particles)
+def plot_gap(num_steps,number_of_particles,H0,H1):
+    gap,_=quantum_simulation(num_steps,number_of_particles,H0,H1)
     speed=gap**2
     xaxis=np.linspace(0.,1.,101)
     yaxis=np.array([gap,speed])
@@ -193,8 +189,8 @@ def plot_gap(num_steps=100,number_of_particles=int(all_lines[0])):
     plt.show()
     
 #We also can represent the evolution of the probability of each state 
-def plot_states(num_steps=100,number_of_particles=int(all_lines[0])):
-    _,probability=quantum_simulation(num_steps,number_of_particles)
+def plot_states(num_steps,number_of_particles,H0,H1):
+    _,probability=quantum_simulation(num_steps,number_of_particles,H0,H1)
     xaxis=np.linspace(0.,1.,101)
     plt.figure()
     i=0
@@ -205,5 +201,3 @@ def plot_states(num_steps=100,number_of_particles=int(all_lines[0])):
     plt.ylabel("Probability")
     plt.xlabel("Adiabatic parameter (s)")
     plt.show()
-
-plot_states()
