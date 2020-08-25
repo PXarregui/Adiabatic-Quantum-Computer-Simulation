@@ -1,0 +1,42 @@
+This file contains an explanation of how to understand and modify the Simulation_parameters.txt file. If you have not read the
+README file, it is necessary to read it before reading this file or others. In order to avoid errors you must modify the file 
+Simulation_parameters.txt in the way it is explained.
+
+In Simulation_parameters.txt you will find the parameters given in the following way:
+
+3
+0
+1,2,1
+0,1,2
+1,0,2
+2,2,0
+
+-The first line must be an integer between 2 and 8, and it represents the number of particles present in the simulation.
+
+-The second line must be an integer equal to 0 or 1. If it is 0, it means that the hi and Jij coefficients are the ones you
+introduce (it will be explained in the next two steps how to introduce them). If it is 1, it means that hi and Jij coefficients
+are randomly generated.
+
+-The third line is only necessary if the second line is 0, as it represents the vector that will give the values of hi. This
+vector must have the same dimension as the number of particles specified in the first line. If the number is 3, it will have 3
+components, which must be real numbers. Each number will be the i-th magnetic field that affects the i-th spin. The three
+components must be separated by a comma.
+
+-The next lines are only necessary if the second line is 0. They represent the matrix that will give the values of Jij. This 
+matrix must have the same dimension as the number of particles specified in the first line. If the number is 3, it will be a 
+3x3 matrix with nine components, which are real numbers, and will occupy three lines. Each component represents the matching 
+force between the spins si and sj. So, the components are:
+
+J11,J12,J13,...,J1n
+J21,J22,J23      .
+J31,J32,J33      .
+ .         .     .
+ .           .   .
+ .             . .
+Jn1,...........,Jnn
+
+being n the number of particles.
+
+The diagonal components must be 0, and the matrix must be symmetric. All components in the same line must be separated by a comma.
+
+If one follows strictly the explanations given in this file, the program should read Simulation_parameters.txt without errors.
