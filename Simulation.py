@@ -204,7 +204,7 @@ def plot_gap(num_steps, number_of_particles, H0, H1):
     speed = gap**2
     xaxis = np.linspace(0., 1., 101)
     yaxis = np.array([gap, speed])
-    plt.figure()
+    figure = plt.figure()
     label = np.array(["Gap", "Speed"])
     j = 0
     for i in yaxis:
@@ -213,7 +213,7 @@ def plot_gap(num_steps, number_of_particles, H0, H1):
     plt.ylabel("Gap, Speed")
     plt.xlabel("Adiabatic parameter (s)")
     plt.legend()
-    plt.show()
+    figure.savefig("Graphs/Gap_and_Speed.png")
 
 # We also can represent the evolution of the probability of each state
 
@@ -221,7 +221,7 @@ def plot_gap(num_steps, number_of_particles, H0, H1):
 def plot_states(num_steps, number_of_particles, H0, H1):
     _, probability = quantum_simulation(num_steps, number_of_particles, H0, H1)
     xaxis = np.linspace(0., 1., 101)
-    plt.figure()
+    figure = plt.figure()
     i = 0
     for i in range(2**number_of_particles):
         plt.plot(xaxis, probability[:, i])
@@ -229,7 +229,7 @@ def plot_states(num_steps, number_of_particles, H0, H1):
     plt.gca().set_ylim([0.0001, 1.])
     plt.ylabel("Probability")
     plt.xlabel("Adiabatic parameter (s)")
-    plt.show()
+    figure.savefig('Graphs/States.png')
 
 # Let's integrate to obtain the time required for the AQC
 
