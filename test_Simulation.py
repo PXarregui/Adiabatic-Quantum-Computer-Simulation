@@ -4,7 +4,7 @@ import pytest
 
 # Tests concerning coefficient_hi_generator()
 
-# RANDOM
+# RANDOM COEFFICIENTS 
 # Test the hi coefficient generator function to see if the return value is
 # a properly shaped numpy array.
 
@@ -22,7 +22,7 @@ def test_real_random_coefficient_hi_generator():
         assert isinstance(Simulation.coefficient_hi_generator(3, 1)[i], float)
         i += 1
 
-# NOT RANDOM
+# NON RANDOM COEFFICIENTS
 # Test the hi coefficient generator function to see if the return value is
 # a properly shaped numpy array.
 
@@ -56,7 +56,7 @@ def test_real_coefficient_hi_generator():
 
 # Tests concerning coefficient_Jij_generator()
 
-# RANDOM
+# RANDOM COEFFICIENTS
 # Test the Jij generator function to see if the matrix has the apropriate
 # dimension.
 
@@ -106,7 +106,7 @@ def test_symmetry_random_coefficient_Jij_generator():
             j += 1
         i += 1
 
-# NOT RANDOM
+# NON RANDOM COEFFICIENTS
 # Test the Jij generator function to see if the matrix has the apropriate
 # dimension.
 
