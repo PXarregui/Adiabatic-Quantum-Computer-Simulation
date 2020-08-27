@@ -4,7 +4,7 @@ import pytest
 
 # Tests concerning coefficient_hi_generator()
 
-# RANDOM COEFFICIENTS 
+# RANDOM COEFFICIENTS
 # Test the hi coefficient generator function to see if the return value is
 # a properly shaped numpy array.
 
