@@ -3,11 +3,27 @@ import scipy.linalg as la
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 
-# This function generates hi coefficients in order to generate the later
-# Hamiltonians
-
 
 def coefficient_hi_generator(number_of_particles, random_or_not):
+    """This function generates a set of coefficients (hi) used later by the
+       Hamiltonian. They represent the local magnetic fields.
+
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+        random_or_not : integer that determines if the coefficients are 
+                        generated randomly or are given by the user 
+                        (1=random, 0=not random).
+
+    Returns:
+        The hi coefficients in form of a vector of dimension number_of_particles.
+
+    Raise:
+        ValueError if :
+            number_of_particles is not between 2 and 8.
+            random_or_not is not 0 or 1.
+            The dimension of the vector is greater than number_of_particles.
+    """
     if abs(number_of_particles) > 8 or abs(number_of_particles) < 2:
         raise ValueError(
             "You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
@@ -37,11 +53,28 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
             hi = np.random.rand(number_of_particles)
             return(hi)
 
-# This function generates Jij coefficients in order to generate the later
-# Hamiltonians
-
 
 def coefficient_Jij_generator(number_of_particles, random_or_not):
+    """This function generates a set of coefficients (Jij) used later by the
+       Hamiltonian. They represent the matching force between spins.
+       
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+        random_or_not : integer that determines if the coefficients are
+                        generated randomly or are given by the user
+                        (1=random, 0=not random).
+    
+    Returns:
+        The Jij coefficients in form of a matrix of dimension
+        number_of_particles x number_of_particles.
+    
+    Raise:
+        ValueError if:
+            The dimension of the matrix is not consistent with number_of_particles.
+            The diagonal of the matrix is not comprised of 0s.
+            The matrix is not symmetric
+    """
     if random_or_not == 0:
         with open("Simulation_parameters.txt", "r") as parameters:
             Jij = np.zeros((number_of_particles, number_of_particles))
@@ -76,7 +109,8 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
         while i < number_of_particles:
             j = 0
             while j < number_of_particles:
-                if i == j:  # The coupling coefficient is 0 if the index is equal
+                if i == j:  
+                    # The coupling coefficient is 0 if the index is equal
                     Jij[i, j] = 0.
                 if i < j:
                     Jij[j, i] = Jij[i, j]
@@ -84,11 +118,18 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
             i = i + 1
         return(Jij)
 
-# Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1.
-# Useful for the construction of the Hamiltonians.
-
 
 def btest(i, n):
+    """This function determines if the n-th bit of a number is 0 or 1.
+    
+    Parameters: 
+        i : number.
+        n : n-th bit of the number i.
+        
+    Returns: 
+        +1 if the n-th bit of i is 1.
+        -1 if the n-th bit of i is 0.
+    """
     if (i & (1 << n)):
         return(1.)
         # n-th bit is set (1)
@@ -97,10 +138,21 @@ def btest(i, n):
         return(-1.)
         # n-th bit is not set (0)
 
-# Create the target Hamiltonian towards which the system will evolve
-
 
 def Hamiltonian_1(number_of_particles, hi, Jij):
+    """This function creates the target Hamiltonian towards which the system 
+       will evolve.
+    
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+        hi : the hi coefficients representing the local magnetic fields.
+        Jij : the Jij coefficients representing the matching force between spins.
+        
+    Returns:
+        A diagonal matrix of dimension 2^number_of_particles x 2^number_of_particles
+        representing the target Hamiltonian H1.
+    """
     ham1 = np.zeros((2**number_of_particles, 2**number_of_particles))
     i = 0
     while i < 2**(number_of_particles):
@@ -121,6 +173,18 @@ def Hamiltonian_1(number_of_particles, hi, Jij):
 
 
 def Hamiltonian_0(number_of_particles):
+    """This function creates the initial Hamiltonian from which the system will
+       evolve.
+    
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+                              
+    Returns: 
+        A symmetric matrix of dimension 2^number_of_particles x 2^number_of_particles 
+        composed of 0s and -1s, representing the initial Hamiltonian.
+        
+    """
     H0 = np.zeros((2**number_of_particles, 2**number_of_particles))
     i = 0
     while i < 2**number_of_particles:
@@ -134,10 +198,20 @@ def Hamiltonian_0(number_of_particles):
                 H0[i + 2**j, i] = 1
             j = j + 1
         i = i + 1
+    H0=-H0
     return(H0)
 
 
 def gap_two_smallest_in_array(array):
+    """This function calculates the difference between the two smallest numbers
+       in an array.
+    
+    Parameters:
+        array : array of numbers.
+        
+    Returns:
+        The difference between the two smallest numbers in array.
+    """
     array_size = len(array)
     first = second = float("inf")
     for i in range(0, array_size):
@@ -155,6 +229,15 @@ def gap_two_smallest_in_array(array):
 
 
 def position_smallest_in_array(array):
+    """This function calculates the position of the smallest number in an array.
+    
+    Parameters:
+        array : array of numbers.
+        
+    Returns:
+        The position of the smallest number in array.
+    """
+    
     array_size = len(array)
     smallest = float("inf")
     for i in range(0, array_size):
@@ -166,8 +249,23 @@ def position_smallest_in_array(array):
 
 
 def quantum_simulation(num_steps, number_of_particles, H0, H1):
+    """This function performs the simulation, evolving from the initial to the
+       target Hamiltonian, calculating in each step the Energy Gap and the 
+       probability of the states.
+       
+    Parameters: 
+        num_steps : number of steps when evolving from H0 to H1.
+        number_of_particles : number of particles present in the system of
+                              particles.
+        H0 : Initial Hamiltonian.
+        H1 : Target Hamiltonian, towards which the system evolves.
+        
+    Returns:
+        A vector containing the value of the Gap in each step.
+        A matrix containing the probability of each state for every step.
+    """
     step = 1.0 / (float(num_steps))  # Size of the step
-    s = 0.0
+    s = 0.0 # Adiabatic parameter that evolves from 0 to 1.
     i = 0
     gap = np.zeros(num_steps + 1)  # array that will contain energy gap
     eigenvectors = np.zeros((num_steps + 1, 2**number_of_particles))
@@ -192,6 +290,7 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
 
 
 def plot_gap(num_steps, number_of_particles, H0, H1):
+    
     gap, _ = quantum_simulation(num_steps, number_of_particles, H0, H1)
     speed = gap**2
     xaxis = np.linspace(0., 1., 101)
