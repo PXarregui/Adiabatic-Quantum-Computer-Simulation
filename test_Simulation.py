@@ -275,5 +275,5 @@ def test_computational_time():
     H0 = Simulation.Hamiltonian_0(2)
     H1 = Simulation.Hamiltonian_1(2, hi, Jij)
     expected_result = 0.6571
-    actual_result = Simulation.computation_time(100, 2, H0, H1)
+    actual_result = Simulation.results_of_simulation(100, 2, H0, H1)
     assert actual_result == expected_result
