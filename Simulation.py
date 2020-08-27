@@ -286,16 +286,22 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
     probability = eigenvectors**2
     return(gap, probability)
 
-# We can represent the evolution of the gap and speed
+# Let's integrate to obtain the time required for the AQC
 
 
-def plot_gap(num_steps, number_of_particles, H0, H1):
+def results_of_simulation(num_steps, number_of_particles, H0, H1):
     
-    gap, _ = quantum_simulation(num_steps, number_of_particles, H0, H1)
-    speed = gap**2
+    #Calculating the time
+    gap, probability = quantum_simulation(num_steps, number_of_particles, H0, H1)
     xaxis = np.linspace(0., 1., 101)
-    yaxis = np.array([gap, speed])
+    speed = gap**2
+    speed_inverse = 1.0 / (speed)
+    time = integrate.simps(speed_inverse, xaxis)
+    time = round(time, 4)
+    
+    #Plotting of the Gap and Speed
     figure = plt.figure()
+    yaxis = np.array([gap, speed])
     label = np.array(["Gap", "Speed"])
     j = 0
     for i in yaxis:
@@ -305,13 +311,8 @@ def plot_gap(num_steps, number_of_particles, H0, H1):
     plt.xlabel("Adiabatic parameter (s)")
     plt.legend()
     figure.savefig("Graphs/Gap_and_Speed.png")
-
-# We also can represent the evolution of the probability of each state
-
-
-def plot_states(num_steps, number_of_particles, H0, H1):
-    _, probability = quantum_simulation(num_steps, number_of_particles, H0, H1)
-    xaxis = np.linspace(0., 1., 101)
+    
+    #Plotting of the probability of the states
     figure = plt.figure()
     i = 0
     for i in range(2**number_of_particles):
@@ -321,16 +322,7 @@ def plot_states(num_steps, number_of_particles, H0, H1):
     plt.ylabel("Probability")
     plt.xlabel("Adiabatic parameter (s)")
     figure.savefig('Graphs/States.png')
-
-# Let's integrate to obtain the time required for the AQC
-
-
-def computation_time(num_steps, number_of_particles, H0, H1):
-    gap, _ = quantum_simulation(num_steps, number_of_particles, H0, H1)
-    xaxis = np.linspace(0., 1., 101)
-    speed_inverse = 1.0 / (gap**2)
-    time = integrate.simps(speed_inverse, xaxis)
-    time = round(time, 4)
+    
     return(time)
 
 # Once all functions are written initialize the variables and call the
@@ -351,7 +343,5 @@ H0 = Hamiltonian_0(int(all_lines[0]))
 H1 = Hamiltonian_1(int(all_lines[0]), hi, Jij)
 
 # Call the functions to return the desired plots and results
-plot_gap(100, number_of_particles, H0, H1)
-plot_states(100, number_of_particles, H0, H1)
 print("The time required for the Adiabatic quantum computing is: ",
-      computation_time(100, number_of_particles, H0, H1))
+      results_of_simulation(100, number_of_particles, H0, H1))
