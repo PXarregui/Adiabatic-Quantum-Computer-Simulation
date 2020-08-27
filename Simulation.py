@@ -33,12 +33,12 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
     else:
         if random_or_not == 0:
             with open("Simulation_parameters.txt", "r") as parameters:
-                #Initialise hi as a vector of 0s, to assign values later.
-                hi = np.zeros(number_of_particles) 
+                # Initialise hi as a vector of 0s, to assign values later.
+                hi = np.zeros(number_of_particles)
                 lines = parameters.read().splitlines()
                 line_marker = 1
                 for line in lines:
-                    #The third line in the file contains the hi values.
+                    # The third line in the file contains the hi values.
                     if line_marker == 3:
                         numbers = line.split(",")
                         if len(numbers) != number_of_particles:
@@ -52,7 +52,7 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
                     line_marker += 1
             return(hi)
         elif random_or_not == 1:
-            #Random values of the hi coefficients.
+            # Random values of the hi coefficients.
             hi = np.random.rand(number_of_particles)
             return(hi)
 
@@ -80,13 +80,13 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
     """
     if random_or_not == 0:
         with open("Simulation_parameters.txt", "r") as parameters:
-            #Initialise Jij as a matrix of 0s, to assign values later.
+            # Initialise Jij as a matrix of 0s, to assign values later.
             Jij = np.zeros((number_of_particles, number_of_particles))
             lines = parameters.read().splitlines()
             i = 0
             line_marker = 1
             for line in lines:
-                #After the third line in the file the Jij values are given.
+                # After the third line in the file the Jij values are given.
                 if line_marker > 3:
                     numbers = line.split(",")
                     if len(numbers) != number_of_particles:
@@ -109,7 +109,7 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
                 line_marker += 1
         return(Jij)
     elif random_or_not == 1:
-        #Random values of the Jij coefficients.
+        # Random values of the Jij coefficients.
         Jij = np.random.rand(number_of_particles, number_of_particles)
         i = 0
         while i < number_of_particles:
@@ -127,7 +127,7 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
 
 
 def btest(i, n):
-    """This function determines if the n-th bit of a number is 0 or 1. It is 
+    """This function determines if the n-th bit of a number is 0 or 1. It is
        used for the generation of both Hamiltonians.
 
     Parameters:
@@ -161,7 +161,7 @@ def Hamiltonian_1(number_of_particles, hi, Jij):
         A diagonal matrix of dimension 2^number_of_particles x 2^number_of_particles
         representing the target Hamiltonian H1.
     """
-    #Initialise H1 with 0s to give value later.
+    # Initialise H1 with 0s to give value later.
     H1 = np.zeros((2**number_of_particles, 2**number_of_particles))
     i = 0
     while i < 2**(number_of_particles):
@@ -170,7 +170,8 @@ def Hamiltonian_1(number_of_particles, hi, Jij):
         while j < number_of_particles:
             k = 0
             while k < number_of_particles:
-                # The Sz operator acts multipliying by 1 if the qubit is 1 and by -1 if it is 0.
+                # The Sz operator acts multipliying by 1 if the qubit is 1 and
+                # by -1 if it is 0.
                 summation = summation + btest(i, j) * btest(i, k) * Jij[j, k]
                 k = k + 1
             summation = summation + btest(i, j) * hi[j]
@@ -193,13 +194,13 @@ def Hamiltonian_0(number_of_particles):
         composed of 0s and -1s, representing the initial Hamiltonian.
 
     """
-    #Initialise H0 with 0s to give value later.
+    # Initialise H0 with 0s to give value later.
     H0 = np.zeros((2**number_of_particles, 2**number_of_particles))
     i = 0
     while i < 2**number_of_particles:
         j = 0
         while j < number_of_particles:
-            #The Sx operator acts changing the qubit value 0 <--> 1.
+            # The Sx operator acts changing the qubit value 0 <--> 1.
             if btest(i, j) == 1.:
                 H0[i, i - 2**j] = 1
                 H0[i - 2**j, i] = 1
@@ -278,7 +279,7 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
     step = 1.0 / (float(num_steps))
     s = 0.0  # Adiabatic parameter that evolves from 0 to 1.
     i = 0
-    #Initialise gap and eigenvectors with 0s to give values later.
+    # Initialise gap and eigenvectors with 0s to give values later.
     gap = np.zeros(num_steps + 1)
     eigenvectors = np.zeros((num_steps + 1, 2**number_of_particles))
     while i <= num_steps:
@@ -286,7 +287,7 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
         H_s = s * H1 + (1.0 - s) * H0
         # Obtaining the eigenvalues and eigenvectors the ground state is known.
         eigenvals, eigenvecs = la.eig(H_s)
-        eigenvals = eigenvals.real 
+        eigenvals = eigenvals.real
         gap[i] = gap_two_smallest_in_array(eigenvals)
         ground_state_position = position_smallest_in_array(eigenvals)
         eigenvectors[i] = np.array(eigenvecs[:, ground_state_position])
@@ -310,7 +311,7 @@ def results_of_simulation(num_steps, number_of_particles, H0, H1):
     Returns:
         The time required for the Adiabatic Quantum Computation.
     """
-    # Calculating the time, integrating the inverse of the speed along the 
+    # Calculating the time, integrating the inverse of the speed along the
     # adiabatic parameter s.
     gap, probability = quantum_simulation(
         num_steps, number_of_particles, H0, H1)
