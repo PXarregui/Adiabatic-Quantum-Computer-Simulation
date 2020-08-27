@@ -182,7 +182,8 @@ def test_symmetry_coefficient_Jij_generator():
 
 # -----------------------------------------------------------------------------
 
-# Test btest function, to see if it returns 1.0 or -1.0 when it should.
+# Test btest function, to see if it returns 1.0 when the bit is 1 or -1.0 when
+# the bit is 0.
 
 
 def test_btest_1():
