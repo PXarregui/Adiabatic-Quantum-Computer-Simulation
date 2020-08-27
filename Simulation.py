@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 import scipy.linalg as la
 import scipy.integrate as integrate
@@ -10,10 +9,10 @@ import matplotlib.pyplot as plt
 
 def coefficient_hi_generator(number_of_particles, random_or_not):
     if abs(number_of_particles) > 8 or abs(number_of_particles) < 2:
-        sys.exit(
+        raise ValueError(
             "You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
     elif random_or_not not in [0, 1]:
-        sys.exit(
+        raise ValueError(
             "The second line of the file containing the parameters must be 0 or 1.")
     else:
         if random_or_not == 0:
@@ -25,7 +24,7 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
                     if line_marker == 3:
                         numbers = line.split(",")
                         if len(numbers) != number_of_particles:
-                            sys.exit(
+                            raise ValueError(
                                 "The dimension of the vector must be equal to the number of particles.")
                         k = 0
                         for number in numbers:
@@ -43,54 +42,47 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
 
 
 def coefficient_Jij_generator(number_of_particles, random_or_not):
-    if abs(number_of_particles) > 8 or abs(number_of_particles) < 2:
-        sys.exit(
-            "You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
-    elif random_or_not not in [0, 1]:
-        sys.exit(
-            "The second line of the file containing the parameters must be 0 or 1.")
-    else:
-        if random_or_not == 0:
-            with open("Simulation_parameters.txt", "r") as parameters:
-                Jij = np.zeros((number_of_particles, number_of_particles))
-                lines = parameters.read().splitlines()
-                i = 0
-                line_marker = 1
-                for line in lines:
-                    if line_marker > 3:
-                        numbers = line.split(",")
-                        if len(numbers) != number_of_particles:
-                            sys.exit(
-                                "The dimension of the matrix must be consistent with the number of particles.")
-                        j = 0
-                        for number in numbers:
-                            num = float(number)
-                            Jij[i, j] = num
-                            if i == j:
-                                if Jij[i, i] != 0.:
-                                    sys.exit(
-                                        "The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
-                            if i > j:
-                                if Jij[i, j] != Jij[j, i]:
-                                    sys.exit(
-                                        "The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
-                            j += 1
-                        i += 1
-                    line_marker += 1
-            return(Jij)
-        elif random_or_not == 1:
-            Jij = np.random.rand(number_of_particles, number_of_particles)
+    if random_or_not == 0:
+        with open("Simulation_parameters.txt", "r") as parameters:
+            Jij = np.zeros((number_of_particles, number_of_particles))
+            lines = parameters.read().splitlines()
             i = 0
-            while i < number_of_particles:
-                j = 0
-                while j < number_of_particles:
-                    if i == j:  # The coupling coefficient is 0 if the index is equal
-                        Jij[i, j] = 0.
-                    if i < j:
-                        Jij[j, i] = Jij[i, j]
-                    j = j + 1
-                i = i + 1
-            return(Jij)
+            line_marker = 1
+            for line in lines:
+                if line_marker > 3:
+                    numbers = line.split(",")
+                    if len(numbers) != number_of_particles:
+                        raise ValueError(
+                            "The dimension of the matrix must be consistent with the number of particles.")
+                    j = 0
+                    for number in numbers:
+                        num = float(number)
+                        Jij[i, j] = num
+                        if i == j:
+                            if Jij[i, i] != 0.:
+                                raise ValueError(
+                                    "The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
+                        if i > j:
+                            if Jij[i, j] != Jij[j, i]:
+                                raise ValueError(
+                                    "The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
+                        j += 1
+                    i += 1
+                line_marker += 1
+        return(Jij)
+    elif random_or_not == 1:
+        Jij = np.random.rand(number_of_particles, number_of_particles)
+        i = 0
+        while i < number_of_particles:
+            j = 0
+            while j < number_of_particles:
+                if i == j:  # The coupling coefficient is 0 if the index is equal
+                    Jij[i, j] = 0.
+                if i < j:
+                    Jij[j, i] = Jij[i, j]
+                j = j + 1
+            i = i + 1
+        return(Jij)
 
 # Determines if the n-th bit of a number is 0 or 1 and returns +1 or -1.
 # Useful for the construction of the Hamiltonians.
