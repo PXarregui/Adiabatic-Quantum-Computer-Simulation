@@ -290,7 +290,19 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
 
 
 def results_of_simulation(num_steps, number_of_particles, H0, H1):
-    
+    """ This function calculates the time required for the AQC and plots the 
+        evolution of the Gap, the speed and the probability of the states.
+        
+    Parameters: 
+        num_steps : number of steps when evolving from H0 to H1.
+        number_of_particles : number of particles present in the system of
+                              particles.
+        H0 : Initial Hamiltonian.
+        H1 : Target Hamiltonian, towards which the system evolves.
+        
+    Returns:
+        The time required for the Adiabatic Quantum Computation.
+    """
     #Calculating the time
     gap, probability = quantum_simulation(num_steps, number_of_particles, H0, H1)
     xaxis = np.linspace(0., 1., 101)
@@ -343,5 +355,5 @@ H0 = Hamiltonian_0(int(all_lines[0]))
 H1 = Hamiltonian_1(int(all_lines[0]), hi, Jij)
 
 # Call the functions to return the desired plots and results
-print("The time required for the Adiabatic quantum computing is: ",
+print("The time required for the Adiabatic Quantum Computing is: ",
       results_of_simulation(100, number_of_particles, H0, H1))
