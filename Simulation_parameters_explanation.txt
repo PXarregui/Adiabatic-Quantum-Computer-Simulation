@@ -17,12 +17,14 @@ In Simulation_parameters.txt you will find the parameters given in the following
 introduce (it will be explained in the next two steps how to introduce them). If it is 1, it means that hi and Jij coefficients
 are randomly generated.
 
--The third line is only necessary if the second line is 0, as it represents the vector that will give the values of hi. This
+-The third line is only read if the second line is 0, as it represents the vector that will give the values of hi. This
 vector must have the same dimension as the number of particles specified in the first line. If the number is 3, it will have 3
 components, which must be real numbers. Each number will be the i-th magnetic field that affects the i-th spin. The three
-components must be separated by a comma.
+components must be separated by a comma. 
 
--The next lines are only necessary if the second line is 0. They represent the matrix that will give the values of Jij. This 
+**WARNING: If the length of the vector is different to the number of particles specified in the first line, errors will arise.
+
+-The next lines are only read if the second line is 0. They represent the matrix that will give the values of Jij. This 
 matrix must have the same dimension as the number of particles specified in the first line. If the number is 3, it will be a 
 3x3 matrix with nine components, which are real numbers, and will occupy three lines. Each component represents the matching 
 force between the spins si and sj. So, the components are:
@@ -38,5 +40,7 @@ Jn1,...........,Jnn
 being n the number of particles.
 
 The diagonal components must be 0, and the matrix must be symmetric. All components in the same line must be separated by a comma.
+
+**WARNING: If the number of rows and columns of the matrix is different to the number of particles specified in the first line, errors will arise.
 
 If one follows strictly the explanations given in this file, the program should read Simulation_parameters.txt without errors.
