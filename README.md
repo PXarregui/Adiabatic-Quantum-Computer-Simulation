@@ -78,7 +78,6 @@ This repository also contains a testing suite, which ensures that the program is
 - If this commands does not initialize any installation it means that during the installation of python the option "Add Python 3.x
 to PATH" has not been checked. An option is to reinstall, check it this time and then repeat the previous step (installing   pytest).
 
-- Once pytest is successfully installed go to the directory in which you have downloaded the repository. To do it use the command cd.
-Example: If the repository is on a directory with the path C:\Users\User\Documents\Physics\Adiabatic-Quantum-Computer-Simulation    and in the command line you are located in a directory with path C:\Users\User, you must write: cd Documents\Physics\Adiabatic-  Quantum-Computer-Simulation.
+- Once pytest is successfully installed go to the directory in which you have downloaded the repository. To do it use the command cd, as explained on the section Installing and Running.
 
-- Once you are located in the directory of the repository on the command line, write on the command line "pytest -v" and press Enter. This will initialize the testing, and if everything works as it should, all test will be shown as "PASSED".
+- Once you are located in the directory of the repository on the command line, write on the command line "pytest -v" and press Enter. This will initialize the testing, and if everything works as it should, all test will be shown as "PASSED". For the testing to work it is also important that the file Simulation_parameters.txt is correctly written, or errors could arise. To make sure it is correctly written you can check it and read Simulation_parameters_explanation.txt to have an idea of how the parameters must be modified.
