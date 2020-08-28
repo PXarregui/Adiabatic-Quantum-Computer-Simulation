@@ -1,6 +1,4 @@
-This file contains an explanation of how to understand and modify the Simulation_parameters.txt file. If you have not read the
-README file, it is necessary to read it before reading this file or others. In order to avoid errors you must modify the file 
-Simulation_parameters.txt in the way it is explained.
+This file contains an explanation of how to understand and modify the Simulation_parameters.txt file. If you have not read the README file, it is necessary to read it before reading this file or others. In order to avoid errors you must modify the file Simulation_parameters.txt in the way it is explained.
 
 In Simulation_parameters.txt you will find the parameters given in the following way:
 
@@ -13,14 +11,9 @@ In Simulation_parameters.txt you will find the parameters given in the following
 
 -The first line must be an integer between 2 and 8, and it represents the number of particles present in the simulation.
 
--The second line must be an integer equal to 0 or 1. If it is 0, it means that the hi and Jij coefficients are the ones you
-introduce (it will be explained in the next two steps how to introduce them). If it is 1, it means that hi and Jij coefficients
-are randomly generated.
+-The second line must be an integer equal to 0 or 1. If it is 0, it means that the hi and Jij coefficients are the ones you introduce (it will be explained in the next two steps how to introduce them). If it is 1, it means that hi and Jij coefficients are randomly generated. 
 
--The third line is only read if the second line is 0, as it represents the vector that will give the values of hi. This
-vector must have the same dimension as the number of particles specified in the first line. If the number is 3, it will have 3
-components, which must be real numbers. Each number will be the i-th magnetic field that affects the i-th spin. The three
-components must be separated by a comma. 
+-The third line is only read if the second line is 0, as it represents the vector that will give the values of hi. This vector must have the same dimension as the number of particles specified in the first line. If the number is 3, it will have 3 components, which must be real numbers. Each number will be the i-th magnetic field that affects the i-th spin. The three components must be separated by a comma. 
 
 **WARNING: If the length of the vector is different to the number of particles specified in the first line, errors will arise.
 
