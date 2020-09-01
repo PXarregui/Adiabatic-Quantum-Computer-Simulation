@@ -2,18 +2,18 @@ import numpy as np
 import scipy.linalg as la
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
+import configparser
 
 
-def coefficient_hi_generator(number_of_particles, random_or_not):
-    """This function generates a set of coefficients (hi) used to generate
+def coefficient_hi_reader(number_of_particles, hi_coefficients):
+    """This function reads a set of coefficients (hi) used to generate
        Hamiltonian H1. They represent the local magnetic fields.
 
     Parameters:
         number_of_particles : number of particles present in the system of
                               particles.
-        random_or_not : integer that determines if the coefficients are
-                        generated randomly or are given by the user
-                        (1=random, 0=not random).
+        hi_coefficients : string that contains the values of the coefficients,
+                          separated by commas.
 
     Returns:
         The hi coefficients in form of a vector of dimension number_of_particles.
@@ -21,52 +21,34 @@ def coefficient_hi_generator(number_of_particles, random_or_not):
     Raise:
         ValueError if :
             number_of_particles is not between 2 and 8.
-            random_or_not is not 0 or 1.
             The dimension of the vector is greater than number_of_particles.
     """
     if abs(number_of_particles) > 8 or abs(number_of_particles) < 2:
         raise ValueError(
             "You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
-    elif random_or_not not in [0, 1]:
-        raise ValueError(
-            "The second line of the file containing the parameters must be 0 or 1.")
     else:
-        if random_or_not == 0:
-            with open("Simulation_parameters.txt", "r") as parameters:
-                # Initialise hi as a vector of 0s, to assign values later.
-                hi = np.zeros(number_of_particles)
-                lines = parameters.read().splitlines()
-                line_marker = 1
-                for line in lines:
-                    # The third line in the file contains the hi values.
-                    if line_marker == 3:
-                        numbers = line.split(",")
-                        if len(numbers) != number_of_particles:
-                            raise ValueError(
-                                "The dimension of the vector must be equal to the number of particles.")
-                        k = 0
-                        for number in numbers:
-                            num = float(number)
-                            hi[k] = num
-                            k += 1
-                    line_marker += 1
-            return(hi)
-        elif random_or_not == 1:
-            # Random values of the hi coefficients.
-            hi = np.random.rand(number_of_particles)
-            return(hi)
+        hi = np.zeros(number_of_particles)
+        numbers = hi_coefficients.split(",")
+        if len(numbers) != number_of_particles:
+            raise ValueError(
+                "The dimension of the vector must be equal to the number of particles.")
+        i = 0
+        for number in numbers:
+            num = float(number)
+            hi[i] = num
+            i += 1
+    return(hi)
 
 
-def coefficient_Jij_generator(number_of_particles, random_or_not):
-    """This function generates a set of coefficients (Jij) used to generate
+def coefficient_Jij_reader(number_of_particles, Jij_coefficients):
+    """This function reads a set of coefficients (Jij) used to generate
        Hamiltonian H1. They represent the matching force between spins.
 
     Parameters:
         number_of_particles : number of particles present in the system of
                               particles.
-        random_or_not : integer that determines if the coefficients are
-                        generated randomly or are given by the user
-                        (1=random, 0=not random).
+        Jij_coefficients : string that contains the values of the coefficients,
+                           separated by commas and slashes.
 
     Returns:
         The Jij coefficients in form of a matrix of dimension
@@ -76,54 +58,87 @@ def coefficient_Jij_generator(number_of_particles, random_or_not):
         ValueError if:
             The dimension of the matrix is not consistent with number_of_particles.
             The diagonal of the matrix is not comprised of 0s.
-            The matrix is not symmetric
+            The matrix is not symmetric.
     """
-    if random_or_not == 0:
-        with open("Simulation_parameters.txt", "r") as parameters:
-            # Initialise Jij as a matrix of 0s, to assign values later.
-            Jij = np.zeros((number_of_particles, number_of_particles))
-            lines = parameters.read().splitlines()
-            i = 0
-            line_marker = 1
-            for line in lines:
-                # After the third line in the file the Jij values are given.
-                if line_marker > 3:
-                    numbers = line.split(",")
-                    if len(numbers) != number_of_particles:
-                        raise ValueError(
-                            "The dimension of the matrix must be consistent with the number of particles.")
-                    j = 0
-                    for number in numbers:
-                        num = float(number)
-                        Jij[i, j] = num
-                        if i == j:
-                            if Jij[i, i] != 0.:
-                                raise ValueError(
-                                    "The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
-                        if i > j:
-                            if Jij[i, j] != Jij[j, i]:
-                                raise ValueError(
-                                    "The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
-                        j += 1
-                    i += 1
-                line_marker += 1
-        return(Jij)
-    elif random_or_not == 1:
-        # Random values of the Jij coefficients.
-        Jij = np.random.rand(number_of_particles, number_of_particles)
-        i = 0
-        while i < number_of_particles:
-            j = 0
-            while j < number_of_particles:
-                if i == j:
-                    # The coupling coefficient is 0 if the index is equal.
-                    Jij[i, j] = 0.
-                if i < j:
-                    # The coupling coefficient Jji is equal to Jij.
-                    Jij[j, i] = Jij[i, j]
-                j = j + 1
-            i = i + 1
-        return(Jij)
+    Jij = np.zeros((number_of_particles, number_of_particles))
+    rows = Jij_coefficients.split("/")
+    if len(rows) != number_of_particles:
+        raise ValueError(
+            "The number of rows must be consistent with the number of particles.")
+    i = 0
+    while i < number_of_particles:
+        numbers = rows[i].split(",")
+        if len(numbers) != number_of_particles:
+            raise ValueError(
+                "The number of columns must be consistent with the number of particles.")
+        j = 0
+        for number in numbers:
+            num = float(number)
+            Jij[i, j] = num
+            if i == j:
+                if Jij[i, i] != 0.:
+                    raise ValueError(
+                        "The diagonal of the J_ij matrix must contain 0s. Check the parameters file.")
+            elif i > j:
+                if Jij[i, j] != Jij[j, i]:
+                    raise ValueError(
+                        "The matrix of J_ij coefficients should be symmetric. Check the parameters file.")
+            j += 1
+        i += 1
+    return(Jij)
+
+
+def random_coefficient_hi_generator(number_of_particles):
+    """This function randomly generates a set of coefficients (hi) used to
+       generate Hamiltonian H1. They represent the local magnetic fields.
+
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+
+    Returns:
+        The hi coefficients in form of a vector of dimension number_of_particles.
+
+    Raise:
+        ValueError if :
+            number_of_particles is not between 2 and 8.
+    """
+    if abs(number_of_particles) > 8 or abs(number_of_particles) < 2:
+        raise ValueError(
+            "You must insert as number of particles a positive integer lower or equal to 8 and higher than 1.")
+    else:
+        # Random values of the hi coefficients.
+        hi = np.random.rand(number_of_particles)
+        return(hi)
+
+
+def random_coefficient_Jij_generator(number_of_particles):
+    """This function randomly generates a set of coefficients (Jij) used to
+       generate Hamiltonian H1. They represent the matching force between spins.
+
+    Parameters:
+        number_of_particles : number of particles present in the system of
+                              particles.
+
+    Returns:
+        The Jij coefficients in form of a matrix of dimension
+        number_of_particles x number_of_particles.
+    """
+    # Random values of the Jij coefficients.
+    Jij = np.random.rand(number_of_particles, number_of_particles)
+    i = 0
+    while i < number_of_particles:
+        j = 0
+        while j < number_of_particles:
+            if i == j:
+                # The coupling coefficient is 0 if the index is equal.
+                Jij[i, j] = 0.
+            if i < j:
+                # The coupling coefficient Jji is equal to Jij.
+                Jij[j, i] = Jij[i, j]
+            j += 1
+        i += 1
+    return(Jij)
 
 
 def btest(i, n):
@@ -353,17 +368,27 @@ def results_of_simulation(num_steps, number_of_particles, H0, H1):
 
 
 # Open the file to read the parameters.
-parameters = open("Simulation_parameters.txt", "r")
-all_lines = parameters.readlines()
-parameters.close()
+initial_parameters = configparser.ConfigParser()
+initial_parameters.read("Simulation_parameters.ini")
+
 
 # Assign the values to the functions' input variables.
-number_of_particles = int(all_lines[0])
-random_or_not = int(all_lines[1])
-hi = coefficient_hi_generator(number_of_particles, random_or_not)
-Jij = coefficient_Jij_generator(number_of_particles, random_or_not)
-H0 = Hamiltonian_0(int(all_lines[0]))
-H1 = Hamiltonian_1(int(all_lines[0]), hi, Jij)
+number_of_particles = int(
+    initial_parameters.get(
+        "Parameters",
+        "Number of Particles"))
+random_or_not = int(initial_parameters.get("Parameters", "Random selection"))
+if random_or_not == 0:
+    hi_coefficients = initial_parameters.get("Coefficients", "hi_coefficients")
+    Jij_coefficients = initial_parameters.get(
+        "Coefficients", "Jij_coefficients")
+    hi = coefficient_hi_reader(number_of_particles, hi_coefficients)
+    Jij = coefficient_Jij_reader(number_of_particles, Jij_coefficients)
+elif random_or_not == 1:
+    hi = random_coefficient_hi_generator(number_of_particles)
+    Jij = random_coefficient_Jij_generator(number_of_particles)
+H0 = Hamiltonian_0(number_of_particles)
+H1 = Hamiltonian_1(number_of_particles, hi, Jij)
 
 # Call the functions to return the desired plots and results.
 print("The time required for the Adiabatic Quantum Computing is: ",
