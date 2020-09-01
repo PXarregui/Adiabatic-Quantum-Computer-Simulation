@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.linalg as la
 import scipy.integrate as integrate
-import matplotlib.pyplot as plt
 
 
 def coefficient_hi_reader(number_of_particles, hi_coefficients):
@@ -312,8 +311,9 @@ def quantum_simulation(num_steps, number_of_particles, H0, H1):
 
 
 def results_of_simulation(num_steps, number_of_particles, H0, H1):
-    """ This function calculates the time required for the AQC and plots the
-        evolution of the Gap, the speed and the probability of the states.
+    """ This function calculates the time required for the AQC and saves the data
+        concerning the evolution of the Gap, the speed and the probability of
+        the states.
 
     Parameters:
         num_steps : number of steps when evolving from H0 to H1.
@@ -336,28 +336,20 @@ def results_of_simulation(num_steps, number_of_particles, H0, H1):
     time = integrate.simps(speed_inverse, xaxis)
     time = round(time, 4)
 
-    # Plotting of the Gap and Speed.
-    figure = plt.figure()
-    yaxis = np.array([gap, speed])
-    label = np.array(["Gap", "Speed"])
-    j = 0
-    for i in yaxis:
-        plt.plot(xaxis, i, label=label[j])
-        j = j + 1
-    plt.ylabel("Gap, Speed")
-    plt.xlabel("Adiabatic parameter (s)")
-    plt.legend()
-    figure.savefig("Graphs/Gap_and_Speed.png")
+    # Saving data of the Gap.
+    gap_file = open("Data/Gap.txt", "w")
+    np.savetxt(gap_file, gap)
+    gap_file.close()
 
-    # Plotting of the probability of the states.
-    figure = plt.figure()
-    i = 0
-    for i in range(2**number_of_particles):
-        plt.plot(xaxis, probability[:, i])
-    plt.yscale('log')
-    plt.gca().set_ylim([0.0001, 1.])
-    plt.ylabel("Probability")
-    plt.xlabel("Adiabatic parameter (s)")
-    figure.savefig('Graphs/States.png')
+    # Saving data of the Speed.
+    speed_file = open("Data/Speed.txt", "w")
+    np.savetxt(speed_file, speed)
+    gap_file.close()
+
+    # Saving data of the evolution of probability.
+    states_file = open("Data/States.txt", "w")
+    for row in probability:
+        np.savetxt(states_file, row)
+    gap_file.close()
 
     return(time)
