@@ -344,12 +344,12 @@ def results_of_simulation(num_steps, number_of_particles, H0, H1):
     # Saving data of the Speed.
     speed_file = open("Data/Speed.txt", "w")
     np.savetxt(speed_file, speed)
-    gap_file.close()
+    speed_file.close()
 
     # Saving data of the evolution of probability.
     states_file = open("Data/States.txt", "w")
     for row in probability:
         np.savetxt(states_file, row)
-    gap_file.close()
+    states_file.close()
 
     return(time)
