@@ -6,21 +6,30 @@ import pytest
 # Tests concerning coefficient_hi_generator()
 
 # RANDOM COEFFICIENTS
-# Test the hi coefficient generator function to see if the return value is
-# a properly shaped numpy array.
 
 
 def test_shape_random_coefficient_hi_generator():
+    """ This test ensures that the random hi coefficients are generated with
+        a proper shape.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_hi_generator() is a numpy array of shape
+            (number_of_particles,).
+    """
     assert numpy.shape(
         Simulation.random_coefficient_hi_generator(
             3)) == (
         3,)
 
-# Test the hi coefficient generator function to see if the return value is
-# an array of real numbers.
-
 
 def test_real_random_coefficient_hi_generator():
+    """ This test ensures that the random hi coefficients are real numbers.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_hi_generator() is an array of real numbers.
+    """
     i = 0
     while i < 3:
         assert isinstance(
@@ -29,11 +38,16 @@ def test_real_random_coefficient_hi_generator():
         i += 1
 
 # NON RANDOM COEFFICIENTS
-# Test the hi coefficient generator function to see if the return value is
-# a properly shaped numpy array.
 
 
 def test_shape_coefficient_hi_reader():
+    """ This test ensures that the hi coefficients read from the file
+        Simulation_parameters.ini are generated with a proper shape.
+
+        Asserts:
+            That the returning value of the function coefficient_hi_reader() is a
+            numpy array of shape (number_of_particles,).
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -46,11 +60,15 @@ def test_shape_coefficient_hi_reader():
             number_of_particles, hi)) == (
         number_of_particles,)
 
-# Test the hi coefficient generator function to see if the return value is
-# an array of real numbers.
-
 
 def test_real_coefficient_hi_reader():
+    """ This test ensures that the hi coefficients read from the file
+        Simulation_parameters.ini are generated as real numbers.
+
+        Asserts:
+            That the returning value of the function coefficient_hi_reader() is an
+            array of real numbers.
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -69,20 +87,30 @@ def test_real_coefficient_hi_reader():
 # Tests concerning coefficient_Jij_generator()
 
 # RANDOM COEFFICIENTS
-# Test the Jij generator function to see if the matrix has the apropriate
-# dimension.
 
 
 def test_shape_random_coefficient_Jij_generator():
+    """ This test ensures that the random Jij coefficients are generated with
+        a proper shape.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_Jij_generator() is a numpy array of shape
+            (number_of_particles,number_of_particles).
+    """
     assert numpy.shape(
         Simulation.random_coefficient_Jij_generator(
             3)) == (
         3, 3)
 
-# Test if the Jij coefficient matrix has 0s in the diagonal.
-
 
 def test_matrix_random_diagonal_coefficient_Jij_generator():
+    """ This test ensures that the Jii coefficients are 0.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_Jij_generator() is a matrix with 0s in the diagonal.
+    """
     i = 0
     generated_matrix = Simulation.random_coefficient_Jij_generator(3)
     while i < 3:
@@ -93,10 +121,14 @@ def test_matrix_random_diagonal_coefficient_Jij_generator():
             j += 1
         i += 1
 
-# Test if the Jij coefficient matrix is composed of real numbers elsewhere.
-
 
 def test_matrix_real_random_coefficient_Jij_generator():
+    """ This test ensures that the random Jij coefficients are real numbers.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_Jij_generator() is a matrix of real numbers.
+    """
     i = 0
     generated_matrix = Simulation.random_coefficient_Jij_generator(3)
     while i < 3:
@@ -107,10 +139,14 @@ def test_matrix_real_random_coefficient_Jij_generator():
             j += 1
         i += 1
 
-# Test if the Jij coefficient matrix is symmetric.
-
 
 def test_symmetry_random_coefficient_Jij_generator():
+    """ This test ensures that the coefficients Jji=Jij.
+
+        Asserts:
+            That the returning value of the function
+            random_coefficient_Jij_generator() is a symmetric matrix.
+    """
     i = 0
     generated_matrix = Simulation.random_coefficient_Jij_generator(3)
     while i < 3:
@@ -122,11 +158,16 @@ def test_symmetry_random_coefficient_Jij_generator():
         i += 1
 
 # NON RANDOM COEFFICIENTS
-# Test the Jij generator function to see if the matrix has the apropriate
-# dimension.
 
 
 def test_shape_coefficient_Jij_reader():
+    """ This test ensures that the Jij coefficients read from the file
+        Simulation_parameters.ini are generated with a proper shape.
+
+        Asserts:
+            That the returning value of the function coefficient_Jij_reader()
+            is a matrix of shape (number_of_particles,number_of_particles).
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -141,10 +182,14 @@ def test_shape_coefficient_Jij_reader():
         number_of_particles,
         number_of_particles)
 
-# Test if the Jij coefficient matrix has 0s in the diagonal.
-
 
 def test_matrix_diagonal_coefficient_Jij_reader():
+    """ This test ensures that the Jii coefficients are 0.
+
+        Asserts:
+            That the returning value of the function coefficient_Jij_reader()
+            is a matrix with 0s in the diagonal.
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -163,10 +208,14 @@ def test_matrix_diagonal_coefficient_Jij_reader():
             j += 1
         i += 1
 
-# Test if the Jij coefficient matrix is composed of real numbers elsewhere.
-
 
 def test_matrix_real_coefficient_Jij_reader():
+    """ This test ensures that the Jij coefficients are real numbers.
+
+        Asserts:
+            That the returning value of the function coefficient_Jij_reader()
+            is a matrix of real numbers.
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -185,10 +234,14 @@ def test_matrix_real_coefficient_Jij_reader():
             j += 1
         i += 1
 
-# Test if the Jij coefficient matrix is symmetric.
-
 
 def test_symmetry_coefficient_Jij_reader():
+    """ This test ensures that the coefficients Jji=Jij.
+
+        Asserts:
+            That the returning value of the function coefficient_Jij_reader()
+            is a symmetric matrix.
+    """
     parameters = configparser.ConfigParser()
     parameters.read("Simulation_parameters.ini")
     number_of_particles = int(
@@ -209,21 +262,36 @@ def test_symmetry_coefficient_Jij_reader():
 
 # -----------------------------------------------------------------------------
 
-# Test btest function, to see if it returns 1.0 when the bit is 1 or -1.0 when
-# the bit is 0.
-
 
 def test_btest_1():
+    """This test ensures that the function btest(i,n) works properly.
+
+       Asserts:
+            That the returning value of btest(100,2) is 1.0, which means that
+            the third bit of the number 100 is 1.
+    """
     assert Simulation.btest(100, 2) == 1.0
 
 
 def test_btest_2():
+    """This test ensures that the function btest(i,n) works properly.
+
+       Asserts:
+            That the returning value of btest(99,2) is -1.0, which means that
+            the third bit of the number 99 is 0.
+    """
     assert Simulation.btest(99, 2) == -1, 0
 
 # -----------------------------------------------------------------------------
 
 
 def test_Hamiltonian_1():
+    """This test ensures that the target Hamiltonian is generated as it should.
+
+       Asserts:
+           That the returning value of Hamiltonian_1(2,hi,Jij), given certain
+           hi and Jij coefficient values, is the one that is expected.
+    """
     hi = numpy.array((1, 1))
     Jij = numpy.array(((0, 1), (1, 0)))
     expected_result = numpy.array(
@@ -235,6 +303,12 @@ def test_Hamiltonian_1():
 
 
 def test_Hamiltonian_0():
+    """This test ensures that the initial Hamiltonian is generated as it should.
+
+       Asserts:
+           That the returning value of Hamiltonian_0(2), is the one that is
+           expected.
+    """
     expected_result = numpy.array(
         ((0., 1., 1., 0.), (1., 0., 0., 1.), (1., 0., 0., 1.), (0., 1., 1., 0.)))
     actual_result = Simulation.Hamiltonian_0(2)
@@ -244,6 +318,10 @@ def test_Hamiltonian_0():
 
 
 def test_gap_two_smallest_in_array():
+    """This test ensures that the function gap_two_smallest_in_array()
+       calculates the difference between the two smallest elements in an array
+       properly.
+    """
     array = [0, 2, 5, 9, 14]
     expected_result = 2
     actual_result = Simulation.gap_two_smallest_in_array(array)
@@ -253,6 +331,9 @@ def test_gap_two_smallest_in_array():
 
 
 def test_position_smallest_in_array():
+    """This test ensures that the function position_smallest_in_array()
+       locates the smallest element in an array properly.
+    """
     array = [2, 5, 9, 0, 14]
     expected_result = 3
     actual_result = Simulation.position_smallest_in_array(array)
@@ -262,6 +343,15 @@ def test_position_smallest_in_array():
 
 
 def test_gap_quantum_simulation():
+    """This test ensures that the evolution of the gap is properly calculated
+       during the simulation.
+
+       Asserts:
+           That the function quantum_simulation(2,2,H0,H1) returns the expected
+           value of the evolution of the gap, in a simulation with 3 steps
+           (initial, middle and final), 2 particles and certain hi and Jij
+           coefficients.
+    """
     hi = numpy.array((1, 1))
     Jij = numpy.array(((0, 1), (1, 0)))
     H0 = Simulation.Hamiltonian_0(2)
@@ -274,6 +364,15 @@ def test_gap_quantum_simulation():
 
 
 def test_eigenvectors_quantum_simulation():
+    """This test ensures that the evolution of the probability of the states
+       is properly calculated during the simulation.
+
+       Asserts:
+           That the function quantum_simulation(2,2,H0,H1) returns the expected
+           value of the evolution of the probability of the states, in a
+           simulation with 3 steps (initial, middle and final), 2 particles and
+           certain hi and Jij coefficients.
+    """
     hi = numpy.array((1, 1))
     Jij = numpy.array(((0, 1), (1, 0)))
     H0 = Simulation.Hamiltonian_0(2)
@@ -298,6 +397,14 @@ def test_eigenvectors_quantum_simulation():
 
 
 def test_computational_time():
+    """This test ensures that the time required for the Adiabatic Quantum
+       Computation is properly calculated.
+
+       Asserts:
+           That the function results_of_simulation(100,2,H0,H1) returns the
+           expected value of the time, in a simulation with 100 steps, 2
+           particles and certain hi and Jij coefficients.
+    """
     hi = numpy.array((1, 2))
     Jij = numpy.array(((0, 1), (1, 0)))
     H0 = Simulation.Hamiltonian_0(2)
